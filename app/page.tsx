@@ -1,6 +1,5 @@
 import { WelcomeCard } from "@/components/home/welcome-card"
-import { PostComposer } from "@/components/home/post-composer"
-import { FeedTabs } from "@/components/home/feed-tabs"
+import { FeedCard } from "@/components/home/feed-tabs"
 import { FeedPost } from "@/components/home/feed-post"
 import {
   PeopleYouMayKnow,
@@ -14,9 +13,10 @@ const feedPosts = [
     initials: "JC",
     role: "Senior Software Engineer",
     company: "TechSolutions",
+    connection: "1st",
     timeAgo: "1 hour ago",
     content:
-      "Excited to be leading a new product development initiative at TechSolutions! We're working on an AI-driven analytics platform. Looking for feedback and collaboration opportunities \u2013 any data analytics experts in my network?",
+      "Excited to be leading a new product development initiative at TechSolutions! We're working on an AI-driven analytics platform. Looking for feedback and collaboration opportunities -- any data analytics experts in my network?",
     image:
       "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
     matchCount: 58,
@@ -28,6 +28,7 @@ const feedPosts = [
     initials: "SL",
     role: "Junior Data Analyst",
     company: "Acme Brages",
+    connection: "2nd",
     timeAgo: "3 hours ago",
     content:
       "Completed my Advanced SQL course today! Feel more confident in my data skills. On to the next challenge!",
@@ -55,17 +56,16 @@ export default function HomePage() {
     <div className="mx-auto max-w-7xl px-4 py-6">
       <div className="flex flex-col gap-6 lg:flex-row">
         {/* Main Feed */}
-        <div className="flex-1 space-y-4">
+        <div className="min-w-0 flex-1 space-y-4">
           <WelcomeCard />
-          <FeedTabs />
-          <PostComposer />
+          <FeedCard />
           {feedPosts.map((post) => (
             <FeedPost key={`${post.author}-${post.timeAgo}`} {...post} />
           ))}
         </div>
 
         {/* Right Sidebar */}
-        <aside className="w-full space-y-4 lg:w-80">
+        <aside className="w-full shrink-0 space-y-4 lg:w-80">
           <PeopleYouMayKnow />
           <RecommendedInternships />
           <TopCompaniesHiring />

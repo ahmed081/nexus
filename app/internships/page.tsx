@@ -13,6 +13,7 @@ import {
   GraduationCap,
   CheckCircle,
   BadgeDollarSign,
+  ArrowUpRight,
 } from "lucide-react"
 
 const payFilters = ["All", "Paid", "Unpaid", "Stipend"]
@@ -29,7 +30,8 @@ const internships = [
     skillMatch: 72,
     skills: ["SQL", "Excel", "Python", "Tableau"],
     outcomes: ["Data visualization", "Report generation", "Statistical analysis"],
-    description: "Gain hands-on experience working with real datasets. You'll support the analytics team in building dashboards and generating actionable insights.",
+    description:
+      "Gain hands-on experience working with real datasets. Support the analytics team in building dashboards and generating actionable insights.",
   },
   {
     title: "Marketing Coordinator Intern",
@@ -42,7 +44,8 @@ const internships = [
     skillMatch: 55,
     skills: ["Social Media", "Content Writing", "SEO", "Canva"],
     outcomes: ["Campaign management", "Content creation", "Analytics reporting"],
-    description: "Work alongside the marketing team to plan, execute, and evaluate digital marketing campaigns across multiple channels.",
+    description:
+      "Work alongside the marketing team to plan, execute, and evaluate digital marketing campaigns across multiple channels.",
   },
   {
     title: "Junior Developer Intern",
@@ -55,7 +58,8 @@ const internships = [
     skillMatch: 88,
     skills: ["JavaScript", "React", "Git", "HTML/CSS"],
     outcomes: ["Full-stack development", "Code reviews", "Agile workflows"],
-    description: "Join a supportive team to build real features that ship to users. Mentorship included with senior developers.",
+    description:
+      "Join a supportive team to build real features that ship to users. Mentorship included with senior developers.",
   },
   {
     title: "UX Research Intern",
@@ -68,7 +72,8 @@ const internships = [
     skillMatch: 60,
     skills: ["User Interviews", "Wireframing", "Figma", "Survey Design"],
     outcomes: ["Research methodologies", "Usability testing", "Persona creation"],
-    description: "Conduct user research to inform product decisions. Learn industry-standard methodologies alongside experienced researchers.",
+    description:
+      "Conduct user research to inform product decisions. Learn industry-standard methodologies alongside experienced researchers.",
   },
   {
     title: "Social Impact Intern",
@@ -81,7 +86,8 @@ const internships = [
     skillMatch: 40,
     skills: ["Research", "Writing", "Presentation", "Community Outreach"],
     outcomes: ["Impact assessment", "Grant writing", "Stakeholder engagement"],
-    description: "Contribute to social impact projects and help communities. Academic credit available. Limited to 20 hrs/week.",
+    description:
+      "Contribute to social impact projects and help communities. Academic credit available. Limited to 20 hrs/week.",
   },
   {
     title: "Cloud Engineering Intern",
@@ -93,28 +99,39 @@ const internships = [
     stipend: "$3,500/mo",
     skillMatch: 75,
     skills: ["AWS", "Linux", "Docker", "Python"],
-    outcomes: ["Cloud architecture", "CI/CD pipelines", "Infrastructure as Code"],
-    description: "Work on cloud infrastructure projects with real production workloads. Mentorship program and full-time conversion opportunity.",
+    outcomes: [
+      "Cloud architecture",
+      "CI/CD pipelines",
+      "Infrastructure as Code",
+    ],
+    description:
+      "Work on cloud infrastructure projects with real production workloads. Mentorship program and full-time conversion opportunity.",
   },
 ]
 
 function getPayBadge(pay: string) {
   switch (pay) {
     case "Paid":
-      return "bg-success/10 text-success"
+      return "bg-success/10 text-success border-success/30"
     case "Unpaid":
-      return "bg-destructive/10 text-destructive"
+      return "bg-destructive/10 text-destructive border-destructive/30"
     case "Stipend":
-      return "bg-accent/10 text-accent-foreground"
+      return "bg-accent/15 text-accent-foreground border-accent/30"
     default:
-      return "bg-secondary text-foreground"
+      return "bg-secondary text-foreground border-border"
   }
 }
 
 function getMatchColor(match: number) {
   if (match >= 80) return "text-success"
-  if (match >= 60) return "text-accent"
+  if (match >= 60) return "text-primary"
   return "text-muted-foreground"
+}
+
+function getMatchBg(match: number) {
+  if (match >= 80) return "bg-success/10"
+  if (match >= 60) return "bg-primary/10"
+  return "bg-secondary"
 }
 
 export default function InternshipsPage() {
@@ -127,7 +144,9 @@ export default function InternshipsPage() {
       searchQuery === "" ||
       i.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       i.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      i.skills.some((s) => s.toLowerCase().includes(searchQuery.toLowerCase()))
+      i.skills.some((s) =>
+        s.toLowerCase().includes(searchQuery.toLowerCase())
+      )
     return matchesPay && matchesSearch
   })
 
@@ -136,54 +155,61 @@ export default function InternshipsPage() {
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-foreground">Internships</h1>
-        <p className="mt-1 text-muted-foreground">
+        <p className="mt-1 text-sm text-muted-foreground">
           Discover ethical internship opportunities with clear learning outcomes
         </p>
       </div>
 
       {/* Search & Filters */}
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <input
-            type="text"
-            placeholder="Search internship titles, companies, or skills..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="h-10 w-full rounded-lg border border-border bg-card pl-9 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-          />
-        </div>
-        <div className="flex items-center gap-2">
-          <Filter className="h-4 w-4 shrink-0 text-muted-foreground" />
-          {payFilters.map((f) => (
-            <button
-              key={f}
-              onClick={() => setActivePay(f)}
-              className={`whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
-                activePay === f
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-card text-muted-foreground hover:bg-secondary hover:text-foreground"
-              }`}
-            >
-              {f}
-            </button>
-          ))}
-        </div>
-      </div>
+      <Card className="mb-6">
+        <CardContent className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Search internship titles, companies, or skills..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="h-10 w-full rounded-lg border border-border bg-secondary pl-9 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <Filter className="h-4 w-4 shrink-0 text-muted-foreground" />
+            {payFilters.map((f) => (
+              <button
+                key={f}
+                onClick={() => setActivePay(f)}
+                className={`whitespace-nowrap rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors ${
+                  activePay === f
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "bg-secondary text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Internship listings */}
-      <div className="space-y-4">
+      <div className="space-y-3">
         {filtered.map((internship) => (
-          <Card key={`${internship.title}-${internship.company}`} className="transition-shadow hover:shadow-md">
+          <Card
+            key={`${internship.title}-${internship.company}`}
+            className="transition-shadow hover:shadow-md"
+          >
             <CardContent className="p-5">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground">
                     {internship.initials}
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground">{internship.title}</h3>
-                    <div className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
+                  <div className="min-w-0">
+                    <h3 className="font-semibold text-foreground">
+                      {internship.title}
+                    </h3>
+                    <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <Building2 className="h-3.5 w-3.5" />
                         {internship.company}
@@ -204,16 +230,16 @@ export default function InternshipsPage() {
                       )}
                     </div>
 
-                    <p className="mt-2 text-sm leading-relaxed text-foreground/80">
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                       {internship.description}
                     </p>
 
                     {/* Skills */}
-                    <div className="mt-2 flex flex-wrap gap-1.5">
+                    <div className="mt-2.5 flex flex-wrap gap-1.5">
                       {internship.skills.map((skill) => (
                         <span
                           key={skill}
-                          className="rounded-md bg-secondary px-2 py-0.5 text-xs text-foreground"
+                          className="rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-foreground"
                         >
                           {skill}
                         </span>
@@ -222,8 +248,10 @@ export default function InternshipsPage() {
 
                     {/* Learning Outcomes */}
                     <div className="mt-3">
-                      <p className="text-xs font-medium text-muted-foreground">Learning Outcomes:</p>
-                      <div className="mt-1 flex flex-wrap gap-1.5">
+                      <p className="text-xs font-semibold text-muted-foreground">
+                        Learning Outcomes:
+                      </p>
+                      <div className="mt-1.5 flex flex-wrap gap-1.5">
                         {internship.outcomes.map((outcome) => (
                           <span
                             key={outcome}
@@ -238,25 +266,42 @@ export default function InternshipsPage() {
                   </div>
                 </div>
 
-                <div className="flex shrink-0 flex-col items-end gap-2 sm:text-right">
+                <div className="flex shrink-0 flex-col items-end gap-2.5">
                   {/* Pay badge */}
-                  <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${getPayBadge(internship.pay)}`}>
+                  <span
+                    className={`rounded-full border px-2.5 py-0.5 text-xs font-bold ${getPayBadge(internship.pay)}`}
+                  >
                     {internship.pay}
                   </span>
 
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle className={`h-4 w-4 ${getMatchColor(internship.skillMatch)}`} />
-                    <span className={`text-sm font-semibold ${getMatchColor(internship.skillMatch)}`}>
+                  <div
+                    className={`flex items-center gap-1.5 rounded-full px-3 py-1 ${getMatchBg(internship.skillMatch)}`}
+                  >
+                    <CheckCircle
+                      className={`h-4 w-4 ${getMatchColor(internship.skillMatch)}`}
+                    />
+                    <span
+                      className={`text-sm font-bold ${getMatchColor(internship.skillMatch)}`}
+                    >
                       {internship.skillMatch}% match
                     </span>
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" aria-label="Save internship">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="bg-transparent"
+                      aria-label="Save internship"
+                    >
                       <Bookmark className="h-4 w-4" />
                     </Button>
-                    <Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90">
+                    <Button
+                      size="sm"
+                      className="gap-1.5 bg-accent font-semibold text-accent-foreground hover:bg-accent/90"
+                    >
                       Apply
+                      <ArrowUpRight className="h-3.5 w-3.5" />
                     </Button>
                   </div>
                 </div>
@@ -267,9 +312,13 @@ export default function InternshipsPage() {
       </div>
 
       {filtered.length === 0 && (
-        <div className="py-16 text-center text-muted-foreground">
-          No internships match your current filters.
-        </div>
+        <Card className="py-16 text-center">
+          <CardContent>
+            <p className="text-muted-foreground">
+              No internships match your current filters.
+            </p>
+          </CardContent>
+        </Card>
       )}
     </div>
   )
